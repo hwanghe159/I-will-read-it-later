@@ -3,14 +3,13 @@ package com.woowacourse.iwillreaditlater.acceptance;
 import com.woowacourse.iwillreaditlater.dto.ArticleResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ArticleAcceptanceTest {
+class ArticleAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("게시글을 등록, 검색, 삭제할 수 있어야 한다.")
     @Test
@@ -24,11 +23,23 @@ class ArticleAcceptanceTest {
     }
 
     private Long addArticle(String url) {
-        return 1L;
+        Map<String, Object> params = new HashMap<>();
+        params.put("url", url);
+
+        //@formatter:off
+        return
+                given().
+                        body(params).
+                when().
+                        post("/articles").
+                then().
+                        log().all().
+                        statusCode(HttpStatus.CREATED.value()).extract().as(Long.class);
+        //@formatter:on
     }
 
     private List<ArticleResponse> searchArticles(String searchWord) {
-        return Arrays.asList(new ArticleResponse());
+        return Arrays.asList(new ArticleResponse("", ""));
     }
 
     private void deleteArticle(Long articleId) {

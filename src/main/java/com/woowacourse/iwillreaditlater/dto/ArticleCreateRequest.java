@@ -5,10 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ArticleResponse {
+public class ArticleCreateRequest {
 
     private String url;
-
-    private String content;
 
 }
