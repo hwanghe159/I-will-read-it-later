@@ -21,9 +21,15 @@
           <v-stepper-items>
             <v-stepper-content :step="1">
               <v-container fluid>
-                <v-card class="mb-12">
-                  <v-textarea filled label="URL" auto-grow></v-textarea>
-                </v-card>
+                <v-textarea
+                  v-model="url"
+                  @keydown.enter.prevent="nextPage"
+                  filled
+                  label="URL"
+                  auto-grow
+                  rows="1"
+                  row-height="15"
+                ></v-textarea>
               </v-container>
               <v-btn color="primary" @click="nextPage">
                 다음
@@ -33,7 +39,23 @@
             </v-stepper-content>
 
             <v-stepper-content :step="2">
-              <v-card class="mb-12" color="grey lighten-1"></v-card>
+              <v-textarea
+                v-model="title"
+                @keydown.enter.prevent="addArticle"
+                filled
+                label="제목이 올바른지 확인해주세요."
+                auto-grow
+                rows="1"
+                row-height="15"
+              ></v-textarea>
+              <v-textarea
+                v-model="content"
+                @keydown.enter.prevent="addArticle"
+                filled
+                label="내용이 올바른지 확인해주세요. (검색할 때 사용됩니다.)"
+                rows="1"
+                height="300"
+              ></v-textarea>
 
               <v-btn color="primary" @click="addArticle">
                 추가
@@ -56,7 +78,9 @@ export default {
   components: {},
   data: () => ({
     dialog: false,
-    url: ""
+    url: "",
+    title: "",
+    content: ""
   }),
   computed: {
     ...mapGetters(["registerArticleFormPage"])
@@ -64,16 +88,22 @@ export default {
   methods: {
     ...mapMutations(["nextPage", "initializePage"]),
     addArticle() {
-      console.log("추가!!");
+      console.log(this.url + "추가!!");
     },
     cancel() {
       this.dialog = false;
+      this.url = "";
+      this.title = "";
+      this.content = "";
       this.initializePage();
     }
   },
   watch: {
     dialog(value) {
       if (!value) {
+        this.url = "";
+        this.title = "";
+        this.content = "";
         this.initializePage();
       }
     }
