@@ -40,6 +40,15 @@
 
             <v-stepper-content :step="2">
               <v-textarea
+                v-model="url"
+                readonly
+                filled
+                label="URL이 올바른지 확인해주세요."
+                auto-grow
+                rows="1"
+                row-height="15"
+              ></v-textarea>
+              <v-textarea
                 v-model="title"
                 @keydown.enter.prevent="addArticle"
                 filled
@@ -71,31 +80,50 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import ApiService from "../api/index";
 
 export default {
   name: "RegisterArticleButton",
   components: {},
   data: () => ({
     dialog: false,
+    registerArticleFormPage: 1,
     url: "",
     title: "",
     content: ""
   }),
-  computed: {
-    ...mapGetters(["registerArticleFormPage"])
-  },
+  computed: {},
   methods: {
-    ...mapMutations(["nextPage", "initializePage"]),
+    nextPage() {
+      ApiService.getMetadata(this.url)
+        .then(({ data }) => {
+          this.title = data.title;
+          this.content = data.content;
+          this.registerArticleFormPage++;
+        })
+        .catch(() => {
+          alert("알 수 없는 에러가 발생했습니다. 다시 시도해주세요.");
+        });
+    },
     addArticle() {
-      console.log(this.url + "추가!!");
+      const articleCreateRequest = {
+        url: this.url,
+        title: this.title,
+        content: this.content
+      };
+      console.log(articleCreateRequest);
+      ApiService.addArticle(articleCreateRequest)
+        .then(() => {})
+        .catch(() => {
+          alert("알 수 없는 에러가 발생했습니다. 다시 시도해주세요.");
+        });
     },
     cancel() {
       this.dialog = false;
       this.url = "";
       this.title = "";
       this.content = "";
-      this.initializePage();
+      this.registerArticleFormPage = 1;
     }
   },
   watch: {
@@ -104,7 +132,7 @@ export default {
         this.url = "";
         this.title = "";
         this.content = "";
-        this.initializePage();
+        this.registerArticleFormPage = 1;
       }
     }
   }
