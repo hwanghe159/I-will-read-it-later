@@ -44,18 +44,16 @@
                 readonly
                 filled
                 label="URL이 올바른지 확인해주세요."
-                auto-grow
                 rows="1"
-                row-height="15"
+                height="100"
               ></v-textarea>
               <v-textarea
                 v-model="title"
                 @keydown.enter.prevent="addArticle"
                 filled
                 label="제목이 올바른지 확인해주세요."
-                auto-grow
                 rows="1"
-                row-height="15"
+                height="100"
               ></v-textarea>
               <v-textarea
                 v-model="content"
@@ -111,9 +109,11 @@ export default {
         title: this.title,
         content: this.content
       };
-      console.log(articleCreateRequest);
       ApiService.addArticle(articleCreateRequest)
-        .then(() => {})
+        .then(() => {
+          alert("게시글이 추가되었습니다.");
+          this.cancel();
+        })
         .catch(() => {
           alert("알 수 없는 에러가 발생했습니다. 다시 시도해주세요.");
         });
