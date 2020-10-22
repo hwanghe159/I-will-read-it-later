@@ -1,39 +1,31 @@
 package com.woowacourse.iwillreaditlater.controller;
 
-import com.woowacourse.iwillreaditlater.dto.ArticleCreateRequest;
 import com.woowacourse.iwillreaditlater.service.ArticleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(ArticleController.class)
 class ArticleControllerTest extends ControllerTest {
 
     @MockBean
-    protected ArticleService articleService;
+    private ArticleService articleService;
 
-    @DisplayName("게시글 생성 테스트")
+    @DisplayName("게시글 추가 테스트")
     @Test
     void addArticleTest() throws Exception {
-        when(articleService.addArticle(any())).thenReturn(1L);
+        given(articleService.addArticle(any())).willReturn(1L);
 
-        ArticleCreateRequest request = new ArticleCreateRequest("https://junodiary.tistory.com/110");
-        String inputJson = objectMapper.writeValueAsString(request);
-
-        mockMvc.perform(post("/articles").
-                content(inputJson).
-                contentType(MediaType.APPLICATION_JSON)).
-                andExpect(status().isCreated());
-    }
-
-    @DisplayName("예외 테스트: 존재하지 않는 url 등록 시 예외가 발생해야 한다.")
-    @Test
-    void addArticleTest2() {
-
+        this.mockMvc.perform(post("/articles"))
+            .andExpect(status().isCreated());
     }
 }
