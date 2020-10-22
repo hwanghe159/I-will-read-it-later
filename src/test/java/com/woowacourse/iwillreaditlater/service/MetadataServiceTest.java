@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MetadataServiceTest {
 
-    private MetadataService metadataService = new MetadataService();
+    private final MetadataService metadataService = new MetadataService();
 
     @DisplayName("url로 메타데이터를 생성해야 한다.")
     @Test

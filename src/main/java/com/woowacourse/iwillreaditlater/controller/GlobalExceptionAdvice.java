@@ -12,14 +12,14 @@ import java.net.UnknownHostException;
 public class GlobalExceptionAdvice {
 
     @ExceptionHandler(UnknownHostException.class)
-    public ResponseEntity<ErrorResponse> UnknownHostExceptionHandler(UnknownHostException e) {
+    public ResponseEntity<ErrorResponse> unknownHostExceptionHandler(UnknownHostException e) {
         return ResponseEntity.
             badRequest().
             body(new ErrorResponse("존재하지 않는 URL입니다. 다시 입력해주세요."));
     }
 
     @ExceptionHandler(HttpStatusException.class)
-    public ResponseEntity<ErrorResponse> HttpStatusExceptionHandler(HttpStatusException e) {
+    public ResponseEntity<ErrorResponse> httpStatusExceptionHandler(HttpStatusException e) {
         return ResponseEntity.
             badRequest().
             body(new ErrorResponse("올바르지 않은 URL입니다. 다시 입력해주세요."));
