@@ -21,6 +21,6 @@ abstract class ControllerTest {
             .addFilters(new CharacterEncodingFilter("UTF-8", true))
             .build();
     }
-    protected ObjectMapper objectMapper = new ObjectMapper();
 
+    protected ObjectMapper objectMapper = new ObjectMapper();
 }
