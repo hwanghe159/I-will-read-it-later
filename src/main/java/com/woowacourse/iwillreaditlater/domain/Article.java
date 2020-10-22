@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -23,6 +20,7 @@ public class Article extends BaseTimeEntity {
 
     private String title;
 
+    @Lob
     private String content;
 
     public Article(String url, String title, String content) {
