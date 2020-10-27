@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
+import static com.woowacourse.iwillreaditlater.ArticleFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -19,11 +20,11 @@ class ArticleRepositoryTest {
 
     @Test
     void saveTest() {
-        articleRepository.save(new Article("", "", ""));
+        articleRepository.save(new Article(ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1));
         List<Article> articles = articleRepository.findAll();
         assertAll(
             () -> assertThat(articles).hasSize(1),
-            () -> assertThat(articles.get(0).getUrl()).isEqualTo("")
+            () -> assertThat(articles.get(0).getUrl()).isEqualTo(ARTICLE_URL_1)
         );
     }
 }

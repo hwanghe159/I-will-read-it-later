@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
 @RestControllerAdvice
@@ -18,7 +19,7 @@ public class GlobalExceptionAdvice {
             body(new ErrorResponse("존재하지 않는 URL입니다. 다시 입력해주세요."));
     }
 
-    @ExceptionHandler(HttpStatusException.class)
+    @ExceptionHandler({HttpStatusException.class, MalformedURLException.class, IllegalArgumentException.class})
     public ResponseEntity<ErrorResponse> httpStatusExceptionHandler(HttpStatusException e) {
         return ResponseEntity.
             badRequest().

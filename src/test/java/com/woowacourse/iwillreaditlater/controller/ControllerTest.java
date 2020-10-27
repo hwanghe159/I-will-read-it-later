@@ -12,6 +12,8 @@ abstract class ControllerTest {
 
     protected MockMvc mockMvc;
 
+    protected ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
     private WebApplicationContext ctx;
 
@@ -21,6 +23,4 @@ abstract class ControllerTest {
             .addFilters(new CharacterEncodingFilter("UTF-8", true))
             .build();
     }
-
-    protected ObjectMapper objectMapper = new ObjectMapper();
 }
