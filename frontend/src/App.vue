@@ -3,7 +3,7 @@
     <v-app id="inspire">
       <navigation-drawer />
       <v-main>
-        <v-container class="fill-height">
+        <v-container>
           <v-row justify="center" align="center">
             <articles />
           </v-row>

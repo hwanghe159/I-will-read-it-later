@@ -9,6 +9,9 @@ const ApiService = {
   getMetadata(uri) {
     return Vue.axios.get("/metadata?url=" + uri);
   },
+  getArticles() {
+    return Vue.axios.get("/articles");
+  },
   addArticle(params) {
     return Vue.axios.post("/articles", params);
   }
