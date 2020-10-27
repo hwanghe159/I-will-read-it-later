@@ -11,6 +11,7 @@
       </v-main>
       <register-article-button />
     </v-app>
+    <snackbar />
   </v-app>
 </template>
 
@@ -18,11 +19,12 @@
 import NavigationDrawer from "./components/NavigationDrawer";
 import RegisterArticleButton from "./components/RegisterArticleButton";
 import Articles from "./components/Articles";
+import Snackbar from "./components/Snackbar";
 
 export default {
   name: "App",
 
-  components: { NavigationDrawer, RegisterArticleButton, Articles },
+  components: { NavigationDrawer, RegisterArticleButton, Articles, Snackbar },
 
   data: () => ({}),
   created() {

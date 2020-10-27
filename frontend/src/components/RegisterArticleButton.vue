@@ -79,6 +79,7 @@
 
 <script>
 import ApiService from "../api/index";
+import { mapMutations } from "vuex";
 
 export default {
   name: "RegisterArticleButton",
@@ -92,15 +93,17 @@ export default {
   }),
   computed: {},
   methods: {
+    ...mapMutations(["showSnackbar"]),
     nextPage() {
+      this.showSnackbar("🔎 URL을 확인하는 중입니다. 잠시만 기다려주세요.");
       ApiService.getMetadata(this.url)
         .then(({ data }) => {
           this.title = data.title;
           this.content = data.content;
           this.registerArticleFormPage++;
         })
-        .catch(() => {
-          alert("알 수 없는 에러가 발생했습니다. 다시 시도해주세요.");
+        .catch(e => {
+          this.showSnackbar("🙅‍♂️ " + e.response.data.message);
         });
     },
     addArticle() {
@@ -114,8 +117,8 @@ export default {
           alert("게시글이 추가되었습니다.");
           this.cancel();
         })
-        .catch(() => {
-          alert("알 수 없는 에러가 발생했습니다. 다시 시도해주세요.");
+        .catch(e => {
+          this.showSnackbar("🙅‍♂️ " + e.response.data.message);
         });
     },
     cancel() {

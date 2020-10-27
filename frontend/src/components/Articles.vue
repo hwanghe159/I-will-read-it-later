@@ -35,13 +35,7 @@ export default {
     curSelectIndex: 0
   }),
   created() {
-    ApiService.getArticles()
-      .then(({ data }) => {
-        this.listData = data;
-      })
-      .catch(() => {
-        alert("알 수 없는 에러가 발생했습니다. 다시 시도해주세요.");
-      });
+    this.getArticles();
   },
   computed: {
     startOffset() {
@@ -65,6 +59,15 @@ export default {
     }
   },
   methods: {
+    getArticles() {
+      ApiService.getArticles()
+        .then(({ data }) => {
+          this.listData = data;
+        })
+        .catch(e => {
+          this.showSnackbar("🙅‍♂️ " + e.response.data.message);
+        });
+    },
     goTo(url) {
       window.open(url, "_blank");
     }
