@@ -30,6 +30,6 @@ public class ArticleController {
         Long articleId = articleService.addArticle(request);
         return ResponseEntity.
                 created(URI.create("/articles/" + articleId)).
-                build();
+                body(articleId);
     }
 }

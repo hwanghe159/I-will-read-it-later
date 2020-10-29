@@ -6,14 +6,11 @@ const ApiService = {
   init() {
     Vue.use(VueAxios, axios);
   },
-  getMetadata(uri) {
-    return Vue.axios.get("/metadata?url=" + uri);
+  get(uri) {
+    return Vue.axios.get(`${uri}`);
   },
-  getArticles() {
-    return Vue.axios.get("/articles");
-  },
-  addArticle(params) {
-    return Vue.axios.post("/articles", params);
+  post(uri, params) {
+    return Vue.axios.post(`${uri}`, params);
   }
 };
 

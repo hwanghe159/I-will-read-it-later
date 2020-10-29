@@ -5,13 +5,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
 
 @Service
 public class MetadataService {
 
-    public MetadataResponse getMetadata(String url) throws IOException {
-        Document document = Jsoup.connect(url).get();
-        return new MetadataResponse(document.title(), document.text());
+    public MetadataResponse getMetadata(String url) throws MalformedURLException {
+        try {
+            Document document = Jsoup.connect(url).get();
+            return new MetadataResponse(document.title(), document.text());
+        } catch (Exception e) {
+            throw new MalformedURLException();
+        }
     }
 }

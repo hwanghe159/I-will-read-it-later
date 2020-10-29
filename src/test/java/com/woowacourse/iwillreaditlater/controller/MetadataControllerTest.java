@@ -3,14 +3,15 @@ package com.woowacourse.iwillreaditlater.controller;
 import com.woowacourse.iwillreaditlater.dto.ErrorResponse;
 import com.woowacourse.iwillreaditlater.dto.MetadataResponse;
 import com.woowacourse.iwillreaditlater.service.MetadataService;
-import org.jsoup.HttpStatusException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.net.UnknownHostException;
+import java.net.MalformedURLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -44,27 +45,13 @@ class MetadataControllerTest extends ControllerTest {
         );
     }
 
-    @DisplayName("존재하지 않는 url을 입력 받으면 에러를 응답할 수 있어야 한다.")
-    @Test
-    void getMetaDataFailByNotExistUrlTest() throws Exception {
-        given(metadataService.getMetadata(any())).willThrow(new UnknownHostException());
-
-        MvcResult mvcResult = mockMvc.perform(get("/metadata?url=https://존재하지않는url.com/2"))
-            .andExpect(status().isBadRequest())
-            .andReturn();
-
-        String content = mvcResult.getResponse().getContentAsString();
-        ErrorResponse response = objectMapper.readValue(content, ErrorResponse.class);
-
-        assertThat(response.getMessage()).isEqualTo("존재하지 않는 URL입니다. 다시 입력해주세요.");
-    }
-
     @DisplayName("올바르지 않은 url을 입력 받으면 에러를 응답할 수 있어야 한다.")
-    @Test
-    void getMetaDataFailByInvalidUrlTest() throws Exception {
-        given(metadataService.getMetadata(any())).willThrow(new HttpStatusException(null, 0, null));
+    @ValueSource(strings = {"https://존재하지않는url.com/2", "https://jjjjunodiary.tistory.com/111"})
+    @ParameterizedTest
+    void getMetaDataFailByInvalidUrlTest(String input) throws Exception {
+        given(metadataService.getMetadata(any())).willThrow(new MalformedURLException());
 
-        MvcResult mvcResult = mockMvc.perform(get("/metadata?url=https://jjjjunodiary.tistory.com/111"))
+        MvcResult mvcResult = mockMvc.perform(get("/metadata?url=" + input))
             .andExpect(status().isBadRequest())
             .andReturn();
 
