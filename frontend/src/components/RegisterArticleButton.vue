@@ -35,7 +35,7 @@
                 다음
               </v-btn>
 
-              <v-btn text @click="cancel">취소</v-btn>
+              <v-btn text @click="init">취소</v-btn>
             </v-stepper-content>
 
             <v-stepper-content :step="2">
@@ -49,7 +49,7 @@
               ></v-textarea>
               <v-textarea
                 v-model="title"
-                @keydown.enter.prevent="addArticle"
+                @keydown.enter.prevent="onAddArticle"
                 filled
                 label="제목이 올바른지 확인해주세요."
                 rows="1"
@@ -57,18 +57,18 @@
               ></v-textarea>
               <v-textarea
                 v-model="content"
-                @keydown.enter.prevent="addArticle"
+                @keydown.enter.prevent="onAddArticle"
                 filled
                 label="내용이 올바른지 확인해주세요. (검색할 때 사용됩니다.)"
                 rows="1"
                 height="300"
               ></v-textarea>
 
-              <v-btn color="primary" @click="addArticle">
+              <v-btn color="primary" @click="onAddArticle">
                 추가
               </v-btn>
 
-              <v-btn text @click="cancel">취소</v-btn>
+              <v-btn text @click="init">취소</v-btn>
             </v-stepper-content>
           </v-stepper-items>
         </template>
@@ -78,8 +78,10 @@
 </template>
 
 <script>
-import ApiService from "../api/index";
+import MetadataService from "../api/modules/metadata";
+import ArticleService from "../api/modules/article";
 import { mapMutations } from "vuex";
+import { SHOW_SNACKBAR } from "../store/shared/mutationTypes";
 
 export default {
   name: "RegisterArticleButton",
@@ -93,10 +95,10 @@ export default {
   }),
   computed: {},
   methods: {
-    ...mapMutations(["showSnackbar"]),
-    nextPage() {
+    ...mapMutations([SHOW_SNACKBAR, "addValidArticle"]),
+    async nextPage() {
       this.showSnackbar("🔎 URL을 확인하는 중입니다. 잠시만 기다려주세요.");
-      ApiService.getMetadata(this.url)
+      MetadataService.get(this.url)
         .then(({ data }) => {
           this.title = data.title;
           this.content = data.content;
@@ -106,22 +108,30 @@ export default {
           this.showSnackbar("🙅‍♂️ " + e.response.data.message);
         });
     },
-    addArticle() {
+    onAddArticle() {
       const articleCreateRequest = {
         url: this.url,
         title: this.title,
         content: this.content
       };
-      ApiService.addArticle(articleCreateRequest)
-        .then(() => {
-          alert("게시글이 추가되었습니다.");
-          this.cancel();
+      ArticleService.addArticle(articleCreateRequest)
+        .then(data => {
+          this.showSnackbar("🤗 게시글이 추가되었습니다.");
+          const createdArticle = {
+            id: data,
+            url: this.url,
+            title: this.title,
+            content: this.content
+          };
+          console.log("생성된 createdArticle" + createdArticle);
+          this.addValidArticle(createdArticle);
+          this.init();
         })
         .catch(e => {
           this.showSnackbar("🙅‍♂️ " + e.response.data.message);
         });
     },
-    cancel() {
+    init() {
       this.dialog = false;
       this.url = "";
       this.title = "";

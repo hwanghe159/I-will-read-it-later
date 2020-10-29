@@ -1,6 +1,11 @@
 <template>
   <v-flex>
-    <v-text-field label="내용으로까지 검색하려면 엔터치세요!" v-model="search">
+    <v-text-field
+      solo
+      label="내용으로까지 검색하려면 엔터치세요!"
+      v-model="search"
+      append-icon="mdi-magnify"
+    >
     </v-text-field>
     <v-list v-for="(listItem, index) in calData" :key="index">
       <v-list-item @click="goTo(listItem.url)">
@@ -21,23 +26,29 @@
 </template>
 
 <script>
-import ApiService from "../api/index";
+import { mapActions, mapGetters, mapMutations } from "vuex";
+import { FETCH_ARTICLES } from "../store/shared/actionTypes";
+import { SHOW_SNACKBAR } from "../store/shared/mutationTypes";
 
 export default {
   name: "Articles",
 
   data: () => ({
     search: "",
-    listData: [],
     searchData: [],
     dataPerPage: 8,
     curPageNum: 1,
     curSelectIndex: 0
   }),
-  created() {
-    this.getArticles();
+  async created() {
+    try {
+      await this.fetchArticles();
+    } catch (e) {
+      this.showSnackbar("게시글을 불러오는 중에 오류가 발생하였습니다.");
+    }
   },
   computed: {
+    ...mapGetters(["allArticles"]),
     startOffset() {
       return (this.curPageNum - 1) * this.dataPerPage;
     },
@@ -49,9 +60,9 @@ export default {
     },
     calData() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.searchData = this.listData
+      this.searchData = this.allArticles
         .filter(data => {
-          return data.title.includes(this.search);
+          return data.title.toLowerCase().includes(this.search.toLowerCase());
         })
         .slice(0);
 
@@ -59,15 +70,8 @@ export default {
     }
   },
   methods: {
-    getArticles() {
-      ApiService.getArticles()
-        .then(({ data }) => {
-          this.listData = data;
-        })
-        .catch(e => {
-          this.showSnackbar("🙅‍♂️ " + e.response.data.message);
-        });
-    },
+    ...mapActions([FETCH_ARTICLES]),
+    ...mapMutations([SHOW_SNACKBAR]),
     goTo(url) {
       window.open(url, "_blank");
     }

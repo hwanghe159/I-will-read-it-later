@@ -1,13 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import snackbar from "./snackbar";
+import Snackbar from "./modules/snackbar";
+import Articles from "./modules/articles";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: { snackbar }
+  modules: { Snackbar, Articles }
 });

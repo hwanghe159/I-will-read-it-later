@@ -1,16 +1,14 @@
 <template>
   <v-app id="inspire">
-    <v-app id="inspire">
-      <navigation-drawer />
-      <v-main>
-        <v-container>
-          <v-row justify="center" align="center">
-            <articles />
-          </v-row>
-        </v-container>
-      </v-main>
-      <register-article-button />
-    </v-app>
+    <navigation-drawer />
+    <v-main>
+      <v-container>
+        <v-row justify="center" align="center">
+          <articles />
+        </v-row>
+      </v-container>
+    </v-main>
+    <register-article-button />
     <snackbar />
   </v-app>
 </template>
