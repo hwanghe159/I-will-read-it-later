@@ -123,7 +123,6 @@ export default {
             title: this.title,
             content: this.content
           };
-          console.log("생성된 createdArticle" + createdArticle);
           this.addValidArticle(createdArticle);
           this.init();
         })

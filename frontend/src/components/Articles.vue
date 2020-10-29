@@ -7,7 +7,7 @@
       append-icon="mdi-magnify"
     >
     </v-text-field>
-    <v-list v-for="(listItem, index) in calData" :key="index">
+    <v-list v-for="(listItem, index) in calData" :key="index" class="pa-0">
       <v-list-item @click="goTo(listItem.url)">
         <v-list-item-content>
           <v-list-item-title class="text--primary">
