@@ -45,7 +45,7 @@
                 filled
                 label="URL이 올바른지 확인해주세요."
                 rows="1"
-                height="100"
+                height="70"
               ></v-textarea>
               <v-textarea
                 v-model="title"
@@ -53,7 +53,7 @@
                 filled
                 label="제목이 올바른지 확인해주세요."
                 rows="1"
-                height="100"
+                height="70"
               ></v-textarea>
               <v-textarea
                 v-model="author"
@@ -61,7 +61,7 @@
                 filled
                 label="작성자가 올바른지 확인해주세요."
                 rows="1"
-                height="100"
+                height="70"
               ></v-textarea>
               <v-textarea
                 v-model="content"
