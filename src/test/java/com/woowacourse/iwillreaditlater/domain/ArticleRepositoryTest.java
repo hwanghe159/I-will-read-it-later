@@ -20,7 +20,7 @@ class ArticleRepositoryTest {
 
     @Test
     void saveTest() {
-        articleRepository.save(new Article(ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1));
+        articleRepository.save(new Article(ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1, ARTICLE_AUTHOR_1, ARTICLE_IMAGE_SOURCE_1));
         List<Article> articles = articleRepository.findAll();
         assertAll(
             () -> assertThat(articles).hasSize(1),

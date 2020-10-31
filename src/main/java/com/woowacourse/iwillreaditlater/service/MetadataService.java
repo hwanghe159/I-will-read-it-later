@@ -11,11 +11,28 @@ import java.net.MalformedURLException;
 public class MetadataService {
 
     public MetadataResponse getMetadata(String url) throws MalformedURLException {
+        Document document;
         try {
-            Document document = Jsoup.connect(url).get();
-            return new MetadataResponse(document.title(), document.text());
+            document = Jsoup.connect(url).get();
         } catch (Exception e) {
             throw new MalformedURLException();
         }
+
+        String title = document.title();
+        String author;
+        String content = document.text();
+        String imageSource;
+        try {
+            author = document.select("meta[name=by]").first().attr("content");
+        } catch (Exception e) {
+            author = "";
+        }
+        try {
+            imageSource = document.select("meta[property=og:image]").first().attr("content");
+        } catch (Exception e) {
+            imageSource = "";
+        }
+
+        return new MetadataResponse(title, author, content, imageSource);
     }
 }

@@ -45,7 +45,7 @@
                 filled
                 label="URL이 올바른지 확인해주세요."
                 rows="1"
-                height="100"
+                height="70"
               ></v-textarea>
               <v-textarea
                 v-model="title"
@@ -53,7 +53,15 @@
                 filled
                 label="제목이 올바른지 확인해주세요."
                 rows="1"
-                height="100"
+                height="70"
+              ></v-textarea>
+              <v-textarea
+                v-model="author"
+                @keydown.enter.prevent="onAddArticle"
+                filled
+                label="작성자가 올바른지 확인해주세요."
+                rows="1"
+                height="70"
               ></v-textarea>
               <v-textarea
                 v-model="content"
@@ -91,7 +99,9 @@ export default {
     registerArticleFormPage: 1,
     url: "",
     title: "",
-    content: ""
+    author: "",
+    content: "",
+    imageSource: ""
   }),
   computed: {},
   methods: {
@@ -101,7 +111,9 @@ export default {
       MetadataService.get(this.url)
         .then(({ data }) => {
           this.title = data.title;
+          this.author = data.author;
           this.content = data.content;
+          this.imageSource = data.imageSource;
           this.registerArticleFormPage++;
         })
         .catch(e => {
@@ -112,7 +124,9 @@ export default {
       const articleCreateRequest = {
         url: this.url,
         title: this.title,
-        content: this.content
+        author: this.author,
+        content: this.content,
+        imageSource: this.imageSource
       };
       ArticleService.addArticle(articleCreateRequest)
         .then(data => {
@@ -121,7 +135,9 @@ export default {
             id: data,
             url: this.url,
             title: this.title,
-            content: this.content
+            author: this.author,
+            content: this.content,
+            imageSource: this.imageSource
           };
           this.addValidArticle(createdArticle);
           this.init();
@@ -134,7 +150,9 @@ export default {
       this.dialog = false;
       this.url = "";
       this.title = "";
+      this.author = "";
       this.content = "";
+      this.imageSource = "";
       this.registerArticleFormPage = 1;
     }
   },
@@ -143,7 +161,9 @@ export default {
       if (!value) {
         this.url = "";
         this.title = "";
+        this.author = "";
         this.content = "";
+        this.imageSource = "";
         this.registerArticleFormPage = 1;
       }
     }

@@ -30,7 +30,7 @@ class MetadataControllerTest extends ControllerTest {
     @Test
     void getMetaDataTest() throws Exception {
         given(metadataService.getMetadata(any())).willReturn(
-            new MetadataResponse("[객체지향의 사실과 오해] 2. 이상한 나라의 객체", "객체는 자율적인 존재다. 객체 개개인은 본인의 상태를 책임져야 한다. 다른 객체의 상태를 주무를 수 없다."));
+            new MetadataResponse("제목", "작성자", "내용", "이미지URL"));
 
         MvcResult mvcResult = mockMvc.perform(get("/metadata?url=https://junodiary.tistory.com/111"))
             .andExpect(status().isOk())
@@ -40,8 +40,10 @@ class MetadataControllerTest extends ControllerTest {
         MetadataResponse response = objectMapper.readValue(content, MetadataResponse.class);
 
         assertAll(
-            () -> assertThat(response.getTitle()).isEqualTo("[객체지향의 사실과 오해] 2. 이상한 나라의 객체"),
-            () -> assertThat(response.getContent()).contains("객체는 자율적인 존재다.")
+            () -> assertThat(response.getTitle()).isEqualTo("제목"),
+            () -> assertThat(response.getAuthor()).isEqualTo("작성자"),
+            () -> assertThat(response.getContent()).isEqualTo("내용"),
+            () -> assertThat(response.getImageSource()).isEqualTo("이미지URL")
         );
     }
 

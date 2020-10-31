@@ -7,19 +7,25 @@
       append-icon="mdi-magnify"
     >
     </v-text-field>
-    <v-list v-for="(listItem, index) in calData" :key="index" class="pa-0">
-      <v-list-item @click="goTo(listItem.url)">
-        <v-list-item-content>
-          <v-list-item-title class="text--primary">
-            {{ listItem.title }}
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            {{ listItem.content.substr(0, 100) }}...
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider></v-divider>
-    </v-list>
+
+    <v-col v-for="(listItem, index) in calData" :key="index" cols="12">
+      <v-card @click="goTo(listItem.url)">
+        <div class="d-flex flex-no-wrap">
+          <v-img
+            :src="listItem.imageSource"
+            :aspect-ratio="1 / 1"
+            max-width="150px"
+          ></v-img>
+          <div>
+            <v-card-title
+              class="headline"
+              v-text="listItem.title"
+            ></v-card-title>
+            <v-card-subtitle v-text="listItem.author"></v-card-subtitle>
+          </div>
+        </div>
+      </v-card>
+    </v-col>
     <br />
     <v-pagination v-model="curPageNum" :length="numOfPages"> </v-pagination>
   </v-flex>

@@ -24,7 +24,8 @@ class MetadataServiceTest {
 
         assertAll(
             () -> assertThat(response.getTitle()).isEqualTo("[객체지향의 사실과 오해] 2. 이상한 나라의 객체"),
-            () -> assertThat(response.getContent()).contains("객체는 자율적인 존재다.")
+            () -> assertThat(response.getAuthor()).contains("junodiary"),
+            () -> assertThat(response.getImageSource()).contains("http")
         );
     }
 

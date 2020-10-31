@@ -11,6 +11,10 @@ public class MetadataResponse {
 
     private String title;
 
+    private String author;
+
     private String content;
+
+    private String imageSource;
 
 }

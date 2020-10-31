@@ -16,7 +16,11 @@ public class ArticleCreateRequest {
 
     private String content;
 
+    private String author;
+
+    private String imageSource;
+
     public Article toArticle() {
-        return new Article(url, title, content);
+        return new Article(url, title, content, author, imageSource);
     }
 }

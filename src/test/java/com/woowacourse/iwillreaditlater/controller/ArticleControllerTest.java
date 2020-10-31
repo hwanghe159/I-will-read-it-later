@@ -38,7 +38,7 @@ class ArticleControllerTest extends ControllerTest {
         given(articleService.addArticle(any())).willReturn(ARTICLE_ID_1);
 
         String inputJson =
-            objectMapper.writeValueAsString(new ArticleCreateRequest(ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1));
+            objectMapper.writeValueAsString(new ArticleCreateRequest(ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1, ARTICLE_AUTHOR_1, ARTICLE_IMAGE_SOURCE_1));
 
         this.mockMvc.perform(post("/articles")
             .content(inputJson)
