@@ -35,8 +35,8 @@ class ArticleServiceTest {
     @BeforeEach
     void setUp() {
         articleService = new ArticleService(articleRepository);
-        article1 = new Article(ARTICLE_ID_1, ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1);
-        article2 = new Article(ARTICLE_ID_2, ARTICLE_URL_2, ARTICLE_TITLE_2, ARTICLE_CONTENT_2);
+        article1 = new Article(ARTICLE_ID_1, ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1, ARTICLE_AUTHOR_1, ARTICLE_IMAGE_SOURCE_1);
+        article2 = new Article(ARTICLE_ID_2, ARTICLE_URL_2, ARTICLE_TITLE_2, ARTICLE_CONTENT_2, ARTICLE_AUTHOR_2, ARTICLE_IMAGE_SOURCE_2);
     }
 
     @DisplayName("존재하는 모든 게시글을 반환할 수 있어야 한다.")
@@ -58,7 +58,7 @@ class ArticleServiceTest {
     void addArticleTest() {
         given(articleRepository.save(any())).willReturn(article1);
 
-        ArticleCreateRequest request = new ArticleCreateRequest(ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1);
+        ArticleCreateRequest request = new ArticleCreateRequest(ARTICLE_URL_1, ARTICLE_TITLE_1, ARTICLE_CONTENT_1, ARTICLE_AUTHOR_1, ARTICLE_IMAGE_SOURCE_1);
         Long articleId = articleService.addArticle(request);
 
         assertThat(articleId).isEqualTo(ARTICLE_ID_1);

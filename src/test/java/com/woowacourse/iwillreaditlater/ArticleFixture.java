@@ -10,4 +10,8 @@ public class ArticleFixture {
     public static final String ARTICLE_TITLE_2 = "제목2";
     public static final String ARTICLE_CONTENT_1 = "내용1";
     public static final String ARTICLE_CONTENT_2 = "내용2";
+    public static final String ARTICLE_AUTHOR_1 = "작성자1";
+    public static final String ARTICLE_AUTHOR_2 = "작성자1";
+    public static final String ARTICLE_IMAGE_SOURCE_1 = "이미지URL1";
+    public static final String ARTICLE_IMAGE_SOURCE_2 = "이미지URL2";
 }

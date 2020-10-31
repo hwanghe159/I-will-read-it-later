@@ -14,7 +14,7 @@
             {{ listItem.title }}
           </v-list-item-title>
           <v-list-item-subtitle>
-            {{ listItem.content.substr(0, 100) }}...
+            by {{ listItem.author }} img {{ listItem.imageSource }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>

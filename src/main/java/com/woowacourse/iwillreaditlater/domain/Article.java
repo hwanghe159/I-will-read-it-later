@@ -23,9 +23,15 @@ public class Article extends BaseTimeEntity {
     @Lob
     private String content;
 
-    public Article(String url, String title, String content) {
+    private String author;
+
+    private String imageSource;
+
+    public Article(String url, String title, String content, String author, String imageSource) {
         this.url = url;
         this.title = title;
         this.content = content;
+        this.author = author;
+        this.imageSource = imageSource;
     }
 }

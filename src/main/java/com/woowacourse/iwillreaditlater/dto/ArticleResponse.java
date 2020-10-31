@@ -12,12 +12,15 @@ public class ArticleResponse {
 
     private String title;
 
-    private String content;
+    private String author;
+
+    private String imageSource;
 
     public ArticleResponse(Article article) {
         this.id = article.getId();
         this.url = article.getUrl();
         this.title = article.getTitle();
-        this.content = article.getContent();
+        this.author = article.getAuthor();
+        this.imageSource = article.getImageSource();
     }
 }
