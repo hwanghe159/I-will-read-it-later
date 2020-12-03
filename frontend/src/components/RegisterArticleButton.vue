@@ -87,9 +87,9 @@
 
 <script>
 import MetadataService from "../api/modules/metadata";
-import ArticleService from "../api/modules/article";
-import { mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 import { SHOW_SNACKBAR } from "../store/shared/mutationTypes";
+import { ADD_ARTICLE } from "../store/shared/actionTypes";
 
 export default {
   name: "RegisterArticleButton",
@@ -105,7 +105,8 @@ export default {
   }),
   computed: {},
   methods: {
-    ...mapMutations([SHOW_SNACKBAR, "addValidArticle"]),
+    ...mapActions([ADD_ARTICLE]),
+    ...mapMutations([SHOW_SNACKBAR]),
     async nextPage() {
       this.showSnackbar("🔎 URL을 확인하는 중입니다. 잠시만 기다려주세요.");
       MetadataService.get(this.url)
@@ -128,18 +129,10 @@ export default {
         content: this.content,
         imageSource: this.imageSource
       };
-      ArticleService.addArticle(articleCreateRequest)
-        .then(data => {
+
+      this.addArticle(articleCreateRequest)
+        .then(() => {
           this.showSnackbar("🤗 게시글이 추가되었습니다.");
-          const createdArticle = {
-            id: data,
-            url: this.url,
-            title: this.title,
-            author: this.author,
-            content: this.content,
-            imageSource: this.imageSource
-          };
-          this.addValidArticle(createdArticle);
           this.init();
         })
         .catch(e => {
