@@ -14,4 +14,5 @@ public class ArticleFixture {
     public static final String ARTICLE_AUTHOR_2 = "작성자1";
     public static final String ARTICLE_IMAGE_SOURCE_1 = "이미지URL1";
     public static final String ARTICLE_IMAGE_SOURCE_2 = "이미지URL2";
+    public static final String ARTICLE_SEARCH_QUERY = "검색쿼리";
 }

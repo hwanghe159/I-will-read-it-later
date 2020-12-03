@@ -5,10 +5,7 @@ import com.woowacourse.iwillreaditlater.dto.ArticleResponse;
 import com.woowacourse.iwillreaditlater.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -25,11 +22,17 @@ public class ArticleController {
         return ResponseEntity.ok(articleResponses);
     }
 
+    @GetMapping(value = "/articles", params = "query")
+    public ResponseEntity<List<ArticleResponse>> searchArticles(@RequestParam String query) {
+        List<ArticleResponse> articleResponses = articleService.searchArticles(query);
+        return ResponseEntity.ok(articleResponses);
+    }
+
     @PostMapping("/articles")
     public ResponseEntity<Long> addArticle(@RequestBody ArticleCreateRequest request) {
         Long articleId = articleService.addArticle(request);
         return ResponseEntity.
-                created(URI.create("/articles/" + articleId)).
-                body(articleId);
+            created(URI.create("/articles/" + articleId)).
+            body(articleId);
     }
 }
