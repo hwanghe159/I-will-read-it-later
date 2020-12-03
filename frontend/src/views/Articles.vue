@@ -2,14 +2,14 @@
   <v-flex>
     <v-text-field
       solo
-      label="내용으로까지 검색하려면 엔터치세요!"
+      label="입력 후 엔터치세요!"
       v-model="query"
       append-icon="mdi-magnify"
       @keyup.enter="search"
     >
     </v-text-field>
 
-    <v-col v-for="(article, index) in calData" :key="index" cols="12">
+    <v-col v-for="(article, index) in this.allArticles" :key="index" cols="12">
       <post :post="article"></post>
     </v-col>
     <br />
@@ -70,6 +70,11 @@ export default {
     ...mapMutations([SHOW_SNACKBAR]),
     search() {
       this.searchArticles(this.query);
+      this.searchData = this.allArticles
+        .filter(data => {
+          return data.title.toLowerCase().includes(this.query.toLowerCase());
+        })
+        .slice(0);
     }
   }
 };

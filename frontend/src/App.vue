@@ -16,7 +16,7 @@
 <script>
 import NavigationDrawer from "./components/NavigationDrawer";
 import RegisterArticleButton from "./components/RegisterArticleButton";
-import Articles from "./components/Articles";
+import Articles from "./views/Articles";
 import Snackbar from "./components/Snackbar";
 
 export default {
