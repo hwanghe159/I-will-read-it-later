@@ -63,4 +63,18 @@ class ArticleServiceTest {
 
         assertThat(articleId).isEqualTo(ARTICLE_ID_1);
     }
+
+    @DisplayName("검색어로 해당하는 게시물들을 반환할 수 있어야 한다.")
+    @Test
+    void searchArticleTest() {
+        given(articleRepository.findByQuery("내용")).willReturn(Arrays.asList(article1, article2));
+
+        List<ArticleResponse> articleResponses = articleService.searchArticles("내용");
+
+        assertAll(
+            () -> assertThat(articleResponses).hasSize(2),
+            () -> assertThat(articleResponses.get(0).getId()).isEqualTo(ARTICLE_ID_1),
+            () -> assertThat(articleResponses.get(1).getId()).isEqualTo(ARTICLE_ID_2)
+        );
+    }
 }

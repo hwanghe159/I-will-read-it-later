@@ -2,29 +2,15 @@
   <v-flex>
     <v-text-field
       solo
-      label="내용으로까지 검색하려면 엔터치세요!"
-      v-model="search"
+      label="입력 후 엔터치세요!"
+      v-model="query"
       append-icon="mdi-magnify"
+      @keyup.enter="search"
     >
     </v-text-field>
 
-    <v-col v-for="(listItem, index) in calData" :key="index" cols="12">
-      <v-card @click="goTo(listItem.url)">
-        <div class="d-flex flex-no-wrap">
-          <v-img
-            :src="listItem.imageSource"
-            :aspect-ratio="1 / 1"
-            max-width="150px"
-          ></v-img>
-          <div>
-            <v-card-title
-              class="headline"
-              v-text="listItem.title"
-            ></v-card-title>
-            <v-card-subtitle v-text="listItem.author"></v-card-subtitle>
-          </div>
-        </div>
-      </v-card>
+    <v-col v-for="(article, index) in this.allArticles" :key="index" cols="12">
+      <post :post="article"></post>
     </v-col>
     <br />
     <v-pagination v-model="curPageNum" :length="numOfPages"> </v-pagination>
@@ -33,14 +19,18 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from "vuex";
-import { FETCH_ARTICLES } from "../store/shared/actionTypes";
+import { FETCH_ARTICLES, SEARCH_ARTICLES } from "../store/shared/actionTypes";
 import { SHOW_SNACKBAR } from "../store/shared/mutationTypes";
+import Post from "../components/Post";
 
 export default {
   name: "Articles",
+  components: {
+    Post
+  },
 
   data: () => ({
-    search: "",
+    query: "",
     searchData: [],
     dataPerPage: 8,
     curPageNum: 1,
@@ -68,7 +58,7 @@ export default {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.searchData = this.allArticles
         .filter(data => {
-          return data.title.toLowerCase().includes(this.search.toLowerCase());
+          return data.title.toLowerCase().includes(this.query.toLowerCase());
         })
         .slice(0);
 
@@ -76,10 +66,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions([FETCH_ARTICLES]),
+    ...mapActions([FETCH_ARTICLES, SEARCH_ARTICLES]),
     ...mapMutations([SHOW_SNACKBAR]),
-    goTo(url) {
-      window.open(url, "_blank");
+    search() {
+      this.searchArticles(this.query);
+      this.searchData = this.allArticles
+        .filter(data => {
+          return data.title.toLowerCase().includes(this.query.toLowerCase());
+        })
+        .slice(0);
     }
   }
 };

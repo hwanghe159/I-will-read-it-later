@@ -29,4 +29,12 @@ public class ArticleService {
 
         return article.getId();
     }
+
+    public List<ArticleResponse> searchArticles(String query) {
+        List<Article> articles = articleRepository.findByQuery(query);
+
+        return articles.stream()
+            .map(ArticleResponse::new)
+            .collect(Collectors.toList());
+    }
 }

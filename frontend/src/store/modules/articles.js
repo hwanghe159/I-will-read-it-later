@@ -1,6 +1,10 @@
 import ArticleService from "../../api/modules/article";
-import { SET_ARTICLES, ADD_VALID_ARTICLE } from "../shared/mutationTypes";
-import { FETCH_ARTICLES } from "../shared/actionTypes";
+import { ADD_VALID_ARTICLE, SET_ARTICLES } from "../shared/mutationTypes";
+import {
+  ADD_ARTICLE,
+  FETCH_ARTICLES,
+  SEARCH_ARTICLES
+} from "../shared/actionTypes";
 
 const state = {
   allArticles: []
@@ -25,6 +29,16 @@ const actions = {
   async [FETCH_ARTICLES]({ commit }) {
     return ArticleService.getArticles().then(({ data }) => {
       commit(SET_ARTICLES, data);
+    });
+  },
+  async [SEARCH_ARTICLES]({ commit }, query) {
+    return ArticleService.searchArticles(query).then(({ data }) => {
+      commit(SET_ARTICLES, data);
+    });
+  },
+  async [ADD_ARTICLE]({ commit }, article) {
+    return ArticleService.addArticle(article).then(() => {
+      commit(ADD_VALID_ARTICLE, article);
     });
   }
 };

@@ -46,4 +46,14 @@ class ArticleControllerTest extends ControllerTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated());
     }
+
+    @DisplayName("게시글 검색 테스트")
+    @Test
+    void searchArticlesTest() throws Exception {
+        given(articleService.searchArticles(ARTICLE_SEARCH_QUERY)).willReturn(Collections.emptyList());
+
+        this.mockMvc.perform(get("/articles?query=" + ARTICLE_SEARCH_QUERY)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+    }
 }
