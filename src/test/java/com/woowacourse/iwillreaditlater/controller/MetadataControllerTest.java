@@ -2,64 +2,64 @@ package com.woowacourse.iwillreaditlater.controller;
 
 import com.woowacourse.iwillreaditlater.dto.ErrorResponse;
 import com.woowacourse.iwillreaditlater.dto.MetadataResponse;
-import com.woowacourse.iwillreaditlater.service.MetadataService;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MvcResult;
-
-import java.net.MalformedURLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MetadataController.class)
 class MetadataControllerTest extends ControllerTest {
-
-    @MockBean
-    private MetadataService metadataService;
 
     @DisplayName("url을 입력 받으면 해당 게시글의 제목과 내용을 응답할 수 있어야 한다.")
     @Test
-    void getMetaDataTest() throws Exception {
-        given(metadataService.getMetadata(any())).willReturn(
-            new MetadataResponse("제목", "작성자", "내용", "이미지URL"));
-
-        MvcResult mvcResult = mockMvc.perform(get("/metadata?url=https://junodiary.tistory.com/111"))
-            .andExpect(status().isOk())
-            .andReturn();
-
-        String content = mvcResult.getResponse().getContentAsString();
-        MetadataResponse response = objectMapper.readValue(content, MetadataResponse.class);
+    void getMetaDataTest() {
+        MetadataResponse metadataResponse = getMetaData("https://junodiary.tistory.com/111");
 
         assertAll(
-            () -> assertThat(response.getTitle()).isEqualTo("제목"),
-            () -> assertThat(response.getAuthor()).isEqualTo("작성자"),
-            () -> assertThat(response.getContent()).isEqualTo("내용"),
-            () -> assertThat(response.getImageSource()).isEqualTo("이미지URL")
+            () -> assertThat(metadataResponse.getTitle()).isEqualTo("[객체지향의 사실과 오해] 2. 이상한 나라의 객체"),
+            () -> assertThat(metadataResponse.getAuthor()).isEqualTo("사용자 junodiary"),
+            () -> assertThat(metadataResponse.getContent()).contains("객체란 상태, 행동, 식별자를 가진 실체다"),
+            () -> assertThat(metadataResponse.getImageSource()).isEqualTo("https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fdu14W7%2FbtqCxQUM2Bj%2FJkV0FwXPA5UPzWI40r9wI1%2Fimg.jpg")
         );
     }
 
     @DisplayName("올바르지 않은 url을 입력 받으면 에러를 응답할 수 있어야 한다.")
     @ValueSource(strings = {"https://존재하지않는url.com/2", "https://jjjjunodiary.tistory.com/111"})
     @ParameterizedTest
-    void getMetaDataFailByInvalidUrlTest(String input) throws Exception {
-        given(metadataService.getMetadata(any())).willThrow(new MalformedURLException());
+    void getMetaDataFailByInvalidUrlTest(String input) {
+        ErrorResponse errorResponse = getMetadataWithInvalidUrl(input);
 
-        MvcResult mvcResult = mockMvc.perform(get("/metadata?url=" + input))
-            .andExpect(status().isBadRequest())
-            .andReturn();
+        assertThat(errorResponse.getMessage()).isEqualTo("올바르지 않은 URL입니다. 다시 입력해주세요.");
+    }
 
-        String content = mvcResult.getResponse().getContentAsString();
-        ErrorResponse response = objectMapper.readValue(content, ErrorResponse.class);
+    private MetadataResponse getMetaData(String url) {
+        //@formatter:off
+        return
+            given()
+                .accept(ContentType.JSON)
+            .when()
+                .get("/metadata?url=" + url)
+            .then()
+                .log().all()
+                .extract()
+                .as(MetadataResponse.class);
+        //@formatter:on
+    }
 
-        assertThat(response.getMessage()).isEqualTo("올바르지 않은 URL입니다. 다시 입력해주세요.");
+    private ErrorResponse getMetadataWithInvalidUrl(String url) {
+        //@formatter:off
+        return
+            given()
+                .accept(ContentType.JSON)
+           .when()
+                .get("/metadata?url=" + url)
+           .then()
+                .log().all()
+                .extract()
+                .as(ErrorResponse.class);
+        //@formatter:on
     }
 }

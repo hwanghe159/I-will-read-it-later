@@ -1,9 +1,15 @@
 package com.woowacourse.iwillreaditlater.dto;
 
 import com.woowacourse.iwillreaditlater.domain.Article;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArticleResponse {
 
     private Long id;
