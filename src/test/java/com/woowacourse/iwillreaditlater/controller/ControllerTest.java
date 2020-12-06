@@ -1,26 +1,25 @@
 package com.woowacourse.iwillreaditlater.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.jdbc.Sql;
 
+@Sql("/truncate.sql")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class ControllerTest {
 
-    protected MockMvc mockMvc;
+    @LocalServerPort
+    int port;
 
-    protected ObjectMapper objectMapper = new ObjectMapper();
-
-    @Autowired
-    private WebApplicationContext ctx;
+    public static RequestSpecification given() {
+        return RestAssured.given().log().all();
+    }
 
     @BeforeEach
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
-            .addFilters(new CharacterEncodingFilter("UTF-8", true))
-            .build();
+    public void setUpAcceptanceTest() {
+        RestAssured.port = port;
     }
 }
